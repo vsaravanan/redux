@@ -5,3 +5,5 @@ const reducer = function(state, action) {
 }
 
 const store = createStore(reducer);
+
+console.log("initial state: ", store.getState());
