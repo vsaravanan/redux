@@ -1,9 +1,21 @@
-import { createStore } from "redux";
+import { createStore, combineReducers } from 'redux';
 
-const reducer = function(state, action) {
+const productsReducer = function(state=[], action) {
   return state;
 }
 
-const store = createStore(reducer);
+const cartReducer = function(state=[], action) {
+  return state;
+}
+
+const allReducers = {
+  products: productsReducer,
+  shoppingCart: cartReducer
+}
+
+const rootReducer = combineReducers(allReducers);
+
+let store = createStore(rootReducer);
 
 console.log("initial state: ", store.getState());
+
