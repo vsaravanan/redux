@@ -1,14 +1,8 @@
-import { createStore, combineReducers } from 'redux';
+import { createStore } from 'redux';
 import { addToCart }  from './actions/cart-actions';
-import { productsReducer } from './reducers/products-reducer';
-import { cartReducer } from './reducers/cart-reducer';
+import rootReducer from './reducers/index';
 
-const allReducers = {
-    products: productsReducer,
-    shoppingCart: cartReducer
-}
 
-const rootReducer = combineReducers(allReducers);
 
 let store = createStore(rootReducer);
 
