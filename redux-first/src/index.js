@@ -1,4 +1,5 @@
 import { createStore, combineReducers } from 'redux';
+import { ADD_TO_CART, addToCart }  from './actions/cart-actions';
 
 const productsReducer = function(state=[], action) {
   return state;
@@ -19,7 +20,6 @@ const initialState = {
     ]
   }
 
-  const ADD_TO_CART = 'ADD_TO_CART';
 
   const cartReducer = function(state=initialState, action) {
     switch (action.type) {
@@ -35,12 +35,6 @@ const initialState = {
     }
   }
 
-function addToCart(product, quantity, unitCost) {
-    return {
-        type: ADD_TO_CART,
-        payload: { product, quantity, unitCost }
-    }
-}
 
 const allReducers = {
     products: productsReducer,
