@@ -13,10 +13,14 @@ const counter = (state = 0, action) => {
 
 const store = createStore(counter);
 
-store.subscribe(() => {
+const render = () => {
     document.body.innerText = store.getState();
-});
+};
+
+store.subscribe(render);
+render();
 
 document.addEventListener('click', () => {
     store.dispatch({ type: 'INCREMENT'});
 })
+
