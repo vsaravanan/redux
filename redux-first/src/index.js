@@ -1,40 +1,7 @@
 import { createStore, combineReducers } from 'redux';
-import { ADD_TO_CART, addToCart }  from './actions/cart-actions';
-
-const productsReducer = function(state=[], action) {
-  return state;
-}
-
-const initialState = {
-    cart: [
-      {
-        product: 'bread 700g',
-        quantity: 2,
-        unitCost: 90
-      },
-      {
-        product: 'milk 500ml',
-        quantity: 1,
-        unitCost: 47
-      }
-    ]
-  }
-
-
-  const cartReducer = function(state=initialState, action) {
-    switch (action.type) {
-      case ADD_TO_CART: {
-        return {
-          ...state,
-          cart: [...state.cart, action.payload]
-        }
-      }
-  
-      default:
-        return state;
-    }
-  }
-
+import { addToCart }  from './actions/cart-actions';
+import { productsReducer } from './reducers/products-reducer';
+import { cartReducer } from './reducers/cart-reducer';
 
 const allReducers = {
     products: productsReducer,
