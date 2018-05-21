@@ -1,62 +1,32 @@
-import React, { Component, PropTypes } from 'react';
-
-const withDevTools = (
-  // process.env.NODE_ENV === 'development' &&
-  typeof window !== 'undefined' && window.devToolsExtension
-);
-
-const reducer = (state = { counter: 0 }, action) => {
-  switch (action.type) {
-    case 'INCREMENT':
-      return { counter: state.counter + 1 };
-    case 'DECREMENT':
-      return { counter: state.counter - 1 };
-    default:
-      return state;
-  }
-};
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { isMonitorAction } from '../store/configureStore';
 
 class Counter extends Component {
-  constructor() {
-    super();
-    this.state = { counter: 0 };
-    
-    this.increment = this.increment.bind(this);
-    this.decrement = this.decrement.bind(this);
-  }
-
-  componentWillMount() {
-    if (withDevTools) {
-      this.store = window.devToolsExtension(reducer);
-      this.store.subscribe(() => { this.setState(this.store.getState()); });
-    }
-  }
-
-  dispatch(action) {
-    if (withDevTools) this.store.dispatch(action);
-    else this.setState(reducer(this.state, action));
-  }
-
-  increment() {
-    this.dispatch({ type: 'INCREMENT' });
-  }
-
-  decrement() {
-    this.dispatch({ type: 'DECREMENT' });
-  }
-
   render() {
-    const { counter } = this.state;
+    const { increment, autoIncrement, incrementAsync, decrement, counter } = this.props;
     return (
       <p>
         Clicked: {counter} times
         {' '}
-        <button onClick={this.increment}>+</button>
+        <button onClick={increment}>+</button>
         {' '}
-        <button onClick={this.decrement}>-</button>
+        <button onClick={decrement}>-</button>
+        {' '}
+        <button onClick={incrementAsync}>Increment async</button>
+        {' '}
+        <button onClick={autoIncrement}>Auto increment</button>
       </p>
     );
   }
 }
+
+Counter.propTypes = {
+  increment: PropTypes.func.isRequired,
+  autoIncrement: PropTypes.func.isRequired,
+  incrementAsync: PropTypes.func.isRequired,
+  decrement: PropTypes.func.isRequired,
+  counter: PropTypes.number.isRequired
+};
 
 export default Counter;
