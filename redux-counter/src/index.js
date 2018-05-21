@@ -15,3 +15,5 @@ const store = createStore(counter);
 
 console.log(store.getState());
 
+store.dispatch({ type: 'INCREMENT'});
+console.log(store.getState());
