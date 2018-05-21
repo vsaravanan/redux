@@ -1,10 +1,5 @@
-import { createStore } from 'redux';
+import store from './store.js';
 import { addToCart }  from './actions/cart-actions';
-import rootReducer from './reducers/index';
-
-
-
-let store = createStore(rootReducer);
 
 console.log("initial state: ", store.getState());
 

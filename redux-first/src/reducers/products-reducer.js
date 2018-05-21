@@ -1,6 +1,6 @@
 
 
 
-export const productsReducer = function(state=[], action) {
+export default function(state=[], action) {
     return state;
 }
