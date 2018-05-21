@@ -1,8 +1,17 @@
-import React from 'react'
-import { render } from 'react-dom'
+import { createStore } from 'redux' ;
 
-// Import the App container component
-import App from './App'
+const counter = (state = 0, action) => {
+  switch (action.type) {
+  case 'INCREMENT':
+    return state + 1;
+  case 'DECREMENT':
+    return state - 1;
+  default:
+    return state;
+  }
+}
 
-// Pass the store into the app container
-render(<App />,  document.getElementById('root'));
+const store = createStore(counter);
+
+console.log(store.getState());
+
