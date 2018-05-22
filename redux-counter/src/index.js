@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { createStore, combineReducers } from 'redux' ;
-//import expect from 'expect';
-//import deepFreeze from 'deep-freeze';
-//import { composeWithDevTools } from 'redux-devtools-extension';
+import { Provider } from 'react-redux';
+import PropTypes from 'prop-types';
+// import expect from 'expect';
+// import deepFreeze from 'deep-freeze';
+import { composeWithDevTools } from 'redux-devtools-extension';
 
 
 
@@ -64,14 +66,15 @@ const todoApp = combineReducers({
   });
 
 
-const store = createStore(todoApp,
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+// const store = createStore(todoApp,
+//     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 //composeWithDevTools()
 
 
 
-  
+
+
   const getVisibleTodos = (
     todos,
     filter
@@ -93,7 +96,7 @@ const store = createStore(todoApp,
   }
 
 
-let nextTodoId = 0;
+
 
 const Todo = ({
   onClick,
@@ -128,7 +131,9 @@ const TodoList = ({
   </ul>
 );
 
-const AddTodo = () => {
+let nextTodoId = 0;
+
+const AddTodo = (props, { store }) => {
   let input;
   return (
     <div>
@@ -147,6 +152,10 @@ const AddTodo = () => {
       </button>
     </div>
   );
+}
+
+AddTodo.contextTypes = {
+  store: PropTypes.object 
 }
 
 const Footer = () => (
@@ -173,9 +182,14 @@ const Footer = () => (
   </p>
 );
 
+
+
+
 class FilterLink extends Component {
 
   componentDidMount() {
+    // const { store } = this.props; // no browser supports this!
+    const store = this.context.store;    
     this.unsubscribe = store.subscribe(() =>
       this.forceUpdate()
     );
@@ -187,6 +201,7 @@ class FilterLink extends Component {
 
   render() {
     const props = this.props;
+    const store = this.context.store;
     const state = store.getState(); 
     return (
       <Link
@@ -210,6 +225,10 @@ class FilterLink extends Component {
 
 };
 
+FilterLink.contextTypes = {
+  store: PropTypes.object
+}
+
 const Link = ({
   active,
   children,
@@ -230,9 +249,11 @@ const Link = ({
     </a>
   );
 };
-
 class VisibleTodoList extends Component {
   componentDidMount() {
+    // const { store } = this.props; // ES6 destructuring syntax
+    // const {store} = this.props; // without destructuring
+    const store = this.context.store; 
     this.unsubscribe = store.subscribe(() =>
       this.forceUpdate()
     );
@@ -243,6 +264,8 @@ class VisibleTodoList extends Component {
   }  
   render() {
     const props = this.props;
+    // const {store} = props;
+    const store = this.context.store; 
     const state = store.getState();
     return (
       <TodoList
@@ -263,25 +286,39 @@ class VisibleTodoList extends Component {
   }
 }
 
-const TodoApp = ({
-  todos,
-  visibilityFilter
-}) => 
+VisibleTodoList.contextTypes = {
+  store: PropTypes.object
+};
+
+const TodoApp = () => 
  (
       <div>
-        <AddTodo />        
+        <AddTodo   />        
 
-        <VisibleTodoList />
+        <VisibleTodoList  />
 
-        <Footer />
+        <Footer  />
 
       </div>
     );
 
-
+    // class Provider extends Component {
+    //   getChildContext() {
+    //     return {
+    //       store: this.props.store // what no ES6 Destructuring here Dan...?
+    //     };
+    //   }
+    
+    //   render() {
+    //     return this.props.children;
+    //   };
+    
+    // }
 
   ReactDOM.render(
-    <TodoApp />,
+    <Provider store={createStore(todoApp, composeWithDevTools())}>
+    <TodoApp   />
+    </Provider>,
     document.getElementById('root')
   );
 
