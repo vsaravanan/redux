@@ -91,10 +91,16 @@ const testRemoveCounter = () => {
 }
 
 const incrementCounter = (list, index) => {
-    return list
-      .slice(0, index)
-      .concat(list[index] + 1)
-      .concat(list.slice(index + 1));
+    // return list
+    //   .slice(0, index)
+    //   .concat(list[index] + 1)
+    //   .concat(list.slice(index + 1));
+    return [
+        ...list.slice(0, index),
+        list[index] + 1,
+        ...list.slice(index + 1)
+      ];
+
    };
 
 // write a test/assertion before implementing the function:
