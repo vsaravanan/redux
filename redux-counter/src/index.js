@@ -427,7 +427,7 @@ class FilterLink extends Component {
   componentWillUnmount() {
     this.unsubscribe();
   }
-    
+
   render() {
     const props = this.props;
     const state = store.getState(); 
@@ -474,6 +474,38 @@ const Link = ({
   );
 };
 
+class VisibleTodoList extends Component {
+  componentDidMount() {
+    this.unsubscribe = store.subscribe(() =>
+      this.forceUpdate()
+    );
+  }
+  
+  componentWillUnmount() {
+    this.unsubscribe();
+  }  
+  render() {
+    const props = this.props;
+    const state = store.getState();
+    return (
+      <TodoList
+        todos={
+          getVisibleTodos(
+            state.todos,
+            state.visibilityFilter
+          )
+        }
+        onTodoClick={id =>
+          store.dispatch({
+            type: 'TOGGLE_TODO',
+            id
+          })
+        }
+        />
+    )
+  }
+}
+
 const TodoApp = ({
   todos,
   visibilityFilter
@@ -490,29 +522,9 @@ const TodoApp = ({
           } 
         />        
 
-        <TodoList 
-          todos={
-            getVisibleTodos (
-              todos,
-              visibilityFilter
-            )
-          }
-          onTodoClick={id =>
-            store.dispatch({
-              type: 'TOGGLE_TODO',
-              id // where is id value?
-            })
-          } />
+        <VisibleTodoList />
 
-        <Footer
-          visibilityFilter={visibilityFilter}
-          onFilterClick={filter =>
-            store.dispatch({
-              type: 'SET_VISIBILITY_FILTER',
-              filter
-            })
-          }
-        />
+        <Footer />
 
       </div>
     );
