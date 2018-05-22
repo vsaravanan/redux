@@ -30,7 +30,7 @@ const Counter = ({
 const store = createStore(counter);
 
 
-const render = () => {
+const renderOld = () => {
     ReactDOM.render (
         <Counter 
         value = {store.getState()} 
@@ -287,13 +287,25 @@ const todoApp = (state = {}, action) => {
 };
 
 
-console.log('Dispatching SET_VISIBILITY_FILTER');
-store.dispatch({
-  type: 'SET_VISIBILITY_FILTER',
-  filter: 'SHOW_COMPLETED'
-});
-console.log('Current state:');
-console.log(store.getState());
-console.log('--------------');
+// console.log('Dispatching SET_VISIBILITY_FILTER');
+// store.dispatch({
+//   type: 'SET_VISIBILITY_FILTER',
+//   filter: 'SHOW_COMPLETED'
+// });
+
 
 console.log('All tests are passed');
+
+
+const { Component } = React;
+
+class TodoApp extends Component {
+// filled out below ...
+}
+
+const render = () => {
+  ReactDOM.render(
+    <TodoApp />,
+    document.getElementById('root')
+  );
+};
