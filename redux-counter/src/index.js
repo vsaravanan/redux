@@ -124,8 +124,11 @@ console.log('All tests are passed');
 
 
 const toggleTodo = (todo) => {
-    todo.completed = !todo.completed;
-    return todo;
+    // todo.completed = !todo.completed;
+    // return todo;
+    return Object.assign({}, todo, {
+        completed: !todo.completed
+      });    
 };
 
 const testToggleTodo = () => {
@@ -141,7 +144,7 @@ const testToggleTodo = () => {
   }
 
   deepFreeze(todoBefore);
-  
+
   expect(
     toggleTodo(todoBefore)
   ).toEqual(todoAfter);
