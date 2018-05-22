@@ -315,7 +315,8 @@ const store = createStore(todoApp,
 const FilterLink = ({
     filter, 
     currentFilter,
-    children
+    children,
+    onClick
   }) => {
     if (filter === currentFilter) {
         return <span>{children}</span>
