@@ -356,13 +356,49 @@ const FilterLink = ({
 
 let nextTodoId = 0;
 
+const Todo = ({
+  onClick,
+  completed,
+  text
+}) => (
+<li
+  onClick={onClick}
+  style={{
+  textDecoration:
+    completed ?
+      'line-through' :
+      'none'
+  }}
+ >
+  {text}
+</li>
+);
+
+const TodoList = ({
+  todos,
+  onTodoClick
+}) => (
+  <ul>
+    {todos.map(todo =>
+      <Todo
+        key={todo.id}
+        {...todo}
+        onClick={() => onTodoClick(todo.id)}
+      />
+    )}
+  </ul>
+);
+
+
+
 class TodoApp extends Component {
     
   render() {
     const {
         todos,
         visibilityFilter
-    } = this.props;
+    } = this.props; //  ES6 Destructuring assignment is not supported in Chrome. use below one
+    //const todos = this.props.todos, visibilityFilter = this.props.visibilityFilter
     const visibleTodos = getVisibleTodos(
         todos,
         visibilityFilter
@@ -378,29 +414,18 @@ class TodoApp extends Component {
             text: this.input.value,
             id: nextTodoId++
           });
+          this.input.value = '';
         }}>
           Add Todo
         </button>
-        <ul>
-          {visibleTodos.map(todo =>
-            <li key={todo.id}
-            onClick={() => {
-             store.dispatch({
-               type: 'TOGGLE_TODO',
-               id: todo.id
-             });
-            }}
-            style={{
-             textDecoration: 
-               todo.completed ? 
-                 'line-through' :
-                 'none'
-            }}
-            >
-              {todo.text}
-            </li>
-          )}
-        </ul>
+        <TodoList 
+          todos={visibleTodos}
+          onTodoClick={id =>
+            store.dispatch({
+              type: 'TOGGLE_TODO',
+              id // where is id value?
+            })
+          } />
 
 <p>
   Show:
@@ -411,14 +436,14 @@ class TodoApp extends Component {
   >
   All
   </FilterLink>
-  {' '}
+  {', '}
   <FilterLink
     filter='SHOW_ACTIVE'
     currentFilter={visibilityFilter}
   >
   Active
   </FilterLink>
-  {' '}
+  {', '}
   <FilterLink
     filter='SHOW_COMPLETED'
     currentFilter={visibilityFilter}
