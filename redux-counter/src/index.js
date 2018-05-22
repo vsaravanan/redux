@@ -57,9 +57,14 @@ const addCounter = (list) => {
 const removeCounter = (list, index) => {
     //list.splice(index, 1);
     //return list;
-    return list
-    .slice(0, index)
-    .concat(list.slice(index + 1));
+    // return list
+    // .slice(0, index)
+    // .concat(list.slice(index + 1));
+
+    return [
+        ...list.slice(0,index),
+        ...list.slice(index+1)
+    ];
 };
 
 const testAddCounter = () => {
