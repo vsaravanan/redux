@@ -126,9 +126,17 @@ console.log('All tests are passed');
 const toggleTodo = (todo) => {
     // todo.completed = !todo.completed;
     // return todo;
-    return Object.assign({}, todo, {
+
+    // ES6
+    // return Object.assign({}, todo, {
+    //     completed: !todo.completed
+    //   });  
+    
+    // ES7
+    return {
+        ...todo,
         completed: !todo.completed
-      });    
+    };
 };
 
 const testToggleTodo = () => {
