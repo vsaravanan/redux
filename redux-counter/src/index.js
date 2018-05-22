@@ -139,26 +139,7 @@ const toggleTodo = (todo) => {
     };
 };
 
-const testToggleTodo = () => {
-  const todoBefore = {
-    id: 0,
-    text: 'Learn Redux',
-    completed: false
-  }
-  const todoAfter  = {
-    id: 0,
-    text: 'Learn Redux',
-    completed: true
-  }
 
-  deepFreeze(todoBefore);
-
-  expect(
-    toggleTodo(todoBefore)
-  ).toEqual(todoAfter);
-}
-
-testToggleTodo(); // run the test
 
 store.subscribe(render);
 render();
@@ -204,5 +185,47 @@ const testAddTodo = () => {
 };
 
 testAddTodo();
+
+
+
+const testToggleTodo = () => {
+    const stateBefore = [
+    {
+        id: 0,
+        text: 'Learn Redux',
+        completed: false
+    },
+    {
+      id: 1,
+      text: 'Go shopping',
+      completed: false
+    }
+    ];
+    const action = {
+      type: 'TOGGLE_TODO',
+      id: 1
+    };
+    const stateAfter = [
+    {
+        id: 0,
+        text: 'Learn Redux',
+        completed: false
+    },
+    {
+      id: 1,
+      text: 'Go shopping',
+      completed: true
+    }
+    ];
+  
+    deepFreeze(stateBefore);
+    deepFreeze(action);
+  
+    expect(
+      todos(stateBefore, action)
+    ).toEqual(stateAfter);
+  }
+
+testToggleTodo(); // run the test
 
 console.log('All tests are passed');
