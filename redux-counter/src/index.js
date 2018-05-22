@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { createStore, combineReducers } from 'redux' ;
 import expect from 'expect';
 import deepFreeze from 'deep-freeze';
+//import { composeWithDevTools } from 'redux-devtools-extension';
 
 const counter = (state = 0, action) => {
   switch (action.type) {
@@ -277,18 +278,22 @@ const visibilityFilter = (
         return state;
     }
 };
-// const todoApp = (state = {}, action) => {
-//   return {
-//     todos: todos(
-//       state.todos,
-//       action
-//     ),
-//     visibilityFilter: visibilityFilter(
-//       state.visibilityFilter,
-//       action
-//     )
+
+
+// const combineReducers = (reducers) => {
+//     return (state = {}, action) => {
+//       return Object.keys(reducers).reduce(
+//         (nextState, key) => {
+//           nextState[key] = reducers[key](
+//             state[key],
+//             action
+//           );
+//           return nextState;
+//         },
+//         {} // empty initial nextState
+//       );
+//     };
 //   };
-// };
 
 const todoApp = combineReducers({
     todos,
@@ -301,10 +306,11 @@ const todoApp = combineReducers({
 //   filter: 'SHOW_COMPLETED'
 // });
 
-const store = createStore(todoApp);
+const store = createStore(todoApp,
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
+//composeWithDevTools()
 
-//const { Component } = React;
 
 let nextTodoId = 0;
 
@@ -323,7 +329,20 @@ class TodoApp extends Component {
         </button>
         <ul>
           {this.props.todos.map(todo =>
-            <li key={todo.id}>
+            <li key={todo.id}
+            onClick={() => {
+             store.dispatch({
+               type: 'TOGGLE_TODO',
+               id: todo.id
+             });
+            }}
+            style={{
+             textDecoration: 
+               todo.completed ? 
+                 'line-through' :
+                 'none'
+            }}
+            >
               {todo.text}
             </li>
           )}
