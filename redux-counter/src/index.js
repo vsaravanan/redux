@@ -55,10 +55,10 @@ const addCounter = (list) => {
 };
 
 const testAddCounter = () => {
-    const listBefore = [];
+    const listBefore = []; 
     const listAfter = [0];
 
-    deepFreeze(listBefore);
+    // deepFreeze(listBefore);
 
     expect (
         addCounter(listBefore)
