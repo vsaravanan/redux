@@ -124,7 +124,8 @@ console.log('All tests are passed');
 
 
 const toggleTodo = (todo) => {
-
+    todo.completed = !todo.completed;
+    return todo;
 };
 
 const testToggleTodo = () => {
