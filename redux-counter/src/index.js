@@ -389,19 +389,23 @@ const TodoList = ({
   </ul>
 );
 
-const AddTodo = () => {
+const AddTodo = ({
+  onAddClick
+}) => {
+  let input;
   return (
     <div>
       <input ref={node => {
-        this.input = node;
+        input = node;
       }} />
       <button onClick={() => {
-        store.dispatch({
-          type: 'ADD_TODO',
-          text: this.input.value,
-          id: nextTodoId++
-        });
-        this.input.value = '';
+        // store.dispatch({
+        //   type: 'ADD_TODO',
+        //   text: input.value,
+        //   id: nextTodoId++
+        // });
+        onAddClick(input.value);
+        input.value = '';
       }}>
         Add Todo
       </button>
