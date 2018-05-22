@@ -445,19 +445,11 @@ const Footer = ({
     </FilterLink>
   </p>
 );
-class TodoApp extends Component {
-    
-  render() {
-    const {
-        todos,
-        visibilityFilter
-    } = this.props; //  ES6 Destructuring assignment is not supported in Chrome. use below one
-    //const todos = this.props.todos, visibilityFilter = this.props.visibilityFilter
-    const visibleTodos = getVisibleTodos(
-        todos,
-        visibilityFilter
-      );      
-    return (
+const TodoApp = ({
+  todos,
+  visibilityFilter
+}) => 
+ (
       <div>
         <AddTodo
           onAddClick={text =>
@@ -470,7 +462,12 @@ class TodoApp extends Component {
         />        
 
         <TodoList 
-          todos={visibleTodos}
+          todos={
+            getVisibleTodos (
+              todos,
+              visibilityFilter
+            )
+          }
           onTodoClick={id =>
             store.dispatch({
               type: 'TOGGLE_TODO',
@@ -490,8 +487,7 @@ class TodoApp extends Component {
 
       </div>
     );
-  }
-}
+
 
 const render = () => {
   ReactDOM.render(
