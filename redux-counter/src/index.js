@@ -50,12 +50,16 @@ const render = () => {
 };
 
 const addCounter = (list) => {
+    //list.push(0);
     return [...list, 0];
 };
 
 const removeCounter = (list, index) => {
-    list.splice(index, 1);
-    return list;
+    //list.splice(index, 1);
+    //return list;
+    return list
+    .slice(0, index)
+    .concat(list.slice(index + 1));
 };
 
 const testAddCounter = () => {
@@ -73,6 +77,8 @@ const testAddCounter = () => {
 const testRemoveCounter = () => {
     const listBefore = [0, 10, 20];
     const listAfter = [0, 20];
+
+    deepFreeze(listBefore);
 
     expect (
         removeCounter(listBefore, 1)
