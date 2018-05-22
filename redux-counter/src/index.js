@@ -312,29 +312,7 @@ const store = createStore(todoApp,
 //composeWithDevTools()
 
 
-const FilterLink = ({
-    filter, 
-    currentFilter,
-    children,
-    onClick
-  }) => {
-    if (filter === currentFilter) {
-        return <span>{children}</span>
-    }
-    return (
-      <a href='#'
-        onClick={e => {
-          e.preventDefault();
-          store.dispatch({
-            type: 'SET_VISIBILITY_FILTER',
-            filter 
-          });
-        }}
-      >
-      {children}
-      </a>
-    );
-  };
+
   
   const getVisibleTodos = (
     todos,
@@ -414,38 +392,77 @@ const AddTodo = ({
   );
 }
 
-const Footer = ({
-  visibilityFilter,
-  onFilterClick
-}) => (
+const Footer = () => (
   <p>
     Show:
     {' '}
     <FilterLink
       filter='SHOW_ALL'
-      currentFilter={visibilityFilter}
-      onClick={onFilterClick}
     >
     All
     </FilterLink>
     {' '}
     <FilterLink
       filter='SHOW_ACTIVE'
-      currentFilter={visibilityFilter}
-      onClick={onFilterClick}
     >
     Active
     </FilterLink>
     {' '}
     <FilterLink
       filter='SHOW_COMPLETED'
-      currentFilter={visibilityFilter}
-      onClick={onFilterClick}
     >
     Completed
     </FilterLink>
   </p>
 );
+
+class FilterLink extends Component {
+  render() {
+    const props = this.props;
+    const state = store.getState(); 
+    return (
+      <Link
+        active={
+          props.filter ===
+          state.visibilityFilter
+        }
+        onClick={() =>
+          store.dispatch({
+            type: 'SET_VISIBILITY_FILTER',
+            filter: props.filter
+          })
+        }
+      >
+        {props.children}
+      </Link>        
+
+    );         
+  }
+
+
+};
+
+const Link = ({
+  active,
+  children,
+  onClick
+}) => {
+  if (active) {
+    return <span>{children}</span>;
+  }
+
+  return (
+    <a href='#'
+      onClick={e => {
+        e.preventDefault();
+        onClick();
+      }}
+    >
+      {children}
+    </a>
+  );
+};
+
 const TodoApp = ({
   todos,
   visibilityFilter
