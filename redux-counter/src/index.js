@@ -329,6 +329,8 @@ const store = createStore(todoApp,
         return todos.filter(
           t => !t.completed
         );
+      default:
+        return todos;        
     }
   }
 
@@ -368,9 +370,7 @@ const TodoList = ({
   </ul>
 );
 
-const AddTodo = ({
-  onAddClick
-}) => {
+const AddTodo = () => {
   let input;
   return (
     <div>
@@ -378,12 +378,11 @@ const AddTodo = ({
         input = node;
       }} />
       <button onClick={() => {
-        // store.dispatch({
-        //   type: 'ADD_TODO',
-        //   text: input.value,
-        //   id: nextTodoId++
-        // });
-        onAddClick(input.value);
+        store.dispatch({
+          type: 'ADD_TODO',
+          text: input.value,
+          id: nextTodoId++
+        });
         input.value = '';
       }}>
         Add Todo
@@ -512,15 +511,7 @@ const TodoApp = ({
 }) => 
  (
       <div>
-        <AddTodo
-          onAddClick={text =>
-            store.dispatch({
-              type: 'ADD_TODO',
-              id: nextTodoId++,
-              text
-            })
-          } 
-        />        
+        <AddTodo />        
 
         <VisibleTodoList />
 
@@ -530,12 +521,12 @@ const TodoApp = ({
     );
 
 
-const render = () => {
+
   ReactDOM.render(
-    <TodoApp {...store.getState()} />,
+    <TodoApp />,
     document.getElementById('root')
   );
-};
+
 
 store.subscribe(render);
 render();
