@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { createStore } from 'redux' ;
+import { createStore, combineReducers } from 'redux' ;
 import expect from 'expect';
 import deepFreeze from 'deep-freeze';
 
@@ -27,7 +27,6 @@ const Counter = ({
         </div>
 );
 
-const store = createStore(counter);
 
 
 const renderOld = () => {
@@ -141,8 +140,6 @@ const toggleTodo = (todo) => {
 
 
 
-store.subscribe(render);
-render();
 
 const todo = (state, action) => {
     switch (action.type) {
@@ -167,10 +164,17 @@ const todo = (state, action) => {
 const todos = (state = [], action) => {
     switch (action.type) {
         case 'ADD_TODO':
-          return [
-            ...state,
-            todo(undefined, action)
-          ];
+        //   return [
+        //     ...state,
+        //     todo(undefined, action)
+        //   ];
+        // array spread causing errors...
+
+        var newState = state.map( (e) => { return e; }); // copy state values
+            newState.push(todo(undefined, action));
+            return newState;
+
+
         case 'TOGGLE_TODO':
             return state.map(t => todo(t, action));
         default:
@@ -263,29 +267,33 @@ const testToggleTodo = () => {
 testToggleTodo(); // run the test
 
 const visibilityFilter = (
-  state = 'SHOW_ALL', // default state
-  action
-) => {
-  switch (action.type) {
-    case 'SET_VISIBILITY_FILTER':
-      return action.filter;
-    default:
-      return state;
-  }
+    state = 'SHOW_ALL', // default state
+    action
+    ) => {
+    switch (action.type) {
+        case 'SET_VISIBILITY_FILTER':
+        return action.filter;
+        default:
+        return state;
+    }
 };
-const todoApp = (state = {}, action) => {
-  return {
-    todos: todos(
-      state.todos,
-      action
-    ),
-    visibilityFilter: visibilityFilter(
-      state.visibilityFilter,
-      action
-    )
-  };
-};
+// const todoApp = (state = {}, action) => {
+//   return {
+//     todos: todos(
+//       state.todos,
+//       action
+//     ),
+//     visibilityFilter: visibilityFilter(
+//       state.visibilityFilter,
+//       action
+//     )
+//   };
+// };
 
+const todoApp = combineReducers({
+    todos,
+    visibilityFilter
+  });
 
 // console.log('Dispatching SET_VISIBILITY_FILTER');
 // store.dispatch({
@@ -293,19 +301,46 @@ const todoApp = (state = {}, action) => {
 //   filter: 'SHOW_COMPLETED'
 // });
 
+const store = createStore(todoApp);
 
-console.log('All tests are passed');
 
+//const { Component } = React;
 
-const { Component } = React;
+let nextTodoId = 0;
 
 class TodoApp extends Component {
-// filled out below ...
+  render() {
+    return (
+      <div>
+        <button onClick={() => {
+          store.dispatch({
+            type: 'ADD_TODO',
+            text: 'Test',
+            id: nextTodoId++
+          });
+        }}>
+          Add Todo
+        </button>
+        <ul>
+          {this.props.todos.map(todo =>
+            <li key={todo.id}>
+              {todo.text}
+            </li>
+          )}
+        </ul>
+      </div>
+    );
+  }
 }
 
 const render = () => {
   ReactDOM.render(
-    <TodoApp />,
+    <TodoApp todos={store.getState().todos} />,
     document.getElementById('root')
   );
 };
+
+store.subscribe(render);
+render();
+console.log('All tests are passed');
+
