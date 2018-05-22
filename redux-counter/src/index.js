@@ -262,4 +262,38 @@ const testToggleTodo = () => {
 
 testToggleTodo(); // run the test
 
+const visibilityFilter = (
+  state = 'SHOW_ALL', // default state
+  action
+) => {
+  switch (action.type) {
+    case 'SET_VISIBILITY_FILTER':
+      return action.filter;
+    default:
+      return state;
+  }
+};
+const todoApp = (state = {}, action) => {
+  return {
+    todos: todos(
+      state.todos,
+      action
+    ),
+    visibilityFilter: visibilityFilter(
+      state.visibilityFilter,
+      action
+    )
+  };
+};
+
+
+console.log('Dispatching SET_VISIBILITY_FILTER');
+store.dispatch({
+  type: 'SET_VISIBILITY_FILTER',
+  filter: 'SHOW_COMPLETED'
+});
+console.log('Current state:');
+console.log(store.getState());
+console.log('--------------');
+
 console.log('All tests are passed');
